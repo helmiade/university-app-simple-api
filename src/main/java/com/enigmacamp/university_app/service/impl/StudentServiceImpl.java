@@ -18,7 +18,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student updateStudent(Student student) {
-        return null;
+        findByIdOrThrowNotFound(student.getId());
+        return studentRepository.save(student);
     }
 
     @Override
@@ -34,5 +35,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteStudent(String id) {
 
+    }
+
+    private Student findByIdOrThrowNotFound(String id) {
+        return studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student ID not found"));
     }
 }
