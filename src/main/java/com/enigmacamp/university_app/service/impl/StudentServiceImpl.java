@@ -24,7 +24,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student getStudentById(String id) {
-        return null;
+        return findByIdOrThrowNotFound(id);
     }
 
     @Override
