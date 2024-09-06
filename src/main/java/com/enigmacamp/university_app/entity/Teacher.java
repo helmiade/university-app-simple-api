@@ -1,6 +1,7 @@
 package com.enigmacamp.university_app.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,8 @@ public class Teacher {
     @Column
     private String address;
 
-    @Column(name = "phone_number",unique = true, columnDefinition = "VARCHAR(50) CHECK (CHAR_LENGTH(phone_number) BETWEEN 11 AND 13)")
+    @Column(name = "phone_number",unique = true)
+    @Size(min = 11, max = 13)
     private String phoneNumber;
 
     @Column(unique = true)
