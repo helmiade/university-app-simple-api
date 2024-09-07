@@ -10,31 +10,32 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1")
 public class StudentController {
     private final StudentService studentService;
 
 //    @GetMapping("/api/v1/students")
-    @RequestMapping("/api/v1/students")
+    @RequestMapping("/students")
     public List<Student> getAllStudent() {
         return studentService.getAllStudents();
     }
 
-    @GetMapping("/api/v1/student/{id}")
+    @GetMapping("/student/{id}")
     public Student getStudentById(@PathVariable String id) {
         return studentService.getStudentById(id);
     }
 
-    @PutMapping("/api/v1/student")
+    @PutMapping("/student")
     public Student updateStudent(@Valid @RequestBody Student student) {
         return studentService.updateStudent(student);
     }
 
-    @PostMapping("/api/v1/student")
+    @PostMapping("/student")
     public Student createStudent(@Valid @RequestBody Student student) {
         return studentService.createStudent(student);
     }
 
-    @DeleteMapping("/api/v1/student/{id}")
+    @DeleteMapping("/student/{id}")
     public void deleteStudent(@PathVariable String id) {
         studentService.deleteStudent(id);
     }

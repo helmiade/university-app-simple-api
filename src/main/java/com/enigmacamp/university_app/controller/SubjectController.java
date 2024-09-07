@@ -10,30 +10,31 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1")
 public class SubjectController {
     private final SubjectService subjectService;
 
-    @RequestMapping("/api/v1/subjects")
+    @RequestMapping("/subjects")
     public List<Subject> getAllSubject() {
         return subjectService.getAllSubjects();
     }
 
-    @GetMapping("/api/v1/subject/{id}")
+    @GetMapping("/subject/{id}")
     public Subject getsubjectById(@PathVariable String id) {
         return subjectService.getSubjectById(id);
     }
 
-    @PutMapping("/api/v1/subject")
+    @PutMapping("/subject")
     public Subject updateSubject(@RequestBody Subject subject) {
         return subjectService.updateSubject(subject);
     }
 
-    @PostMapping("/api/v1/subject")
+    @PostMapping("/subject")
     public Subject createSubject(@RequestBody Subject subject) {
         return subjectService.createSubject(subject);
     }
 
-    @DeleteMapping("/api/v1/subject/{id}")
+    @DeleteMapping("/subject/{id}")
     public void deleteSubject(@PathVariable String id) {
         subjectService.deleteSubject(id);
     }

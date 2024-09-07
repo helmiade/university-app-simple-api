@@ -11,31 +11,32 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1")
 public class TeacherController {
     private final TeacherService teacherService;
 
     //    @GetMapping("/api/v1/students")
-    @RequestMapping("/api/v1/teachers")
+    @RequestMapping("/teachers")
     public List<Teacher> getAllTeacher() {
         return teacherService.getAllTeachers();
     }
 
-    @GetMapping("/api/v1/teacher/{id}")
+    @GetMapping("/teacher/{id}")
     public Teacher getTeacherById(@PathVariable String id) {
         return teacherService.getTeacherById(id);
     }
 
-    @PutMapping("/api/v1/teacher")
+    @PutMapping("/teacher")
     public Teacher updateTeacher(@Valid @RequestBody Teacher teacher) {
         return teacherService.updateTeacher(teacher);
     }
 
-    @PostMapping("/api/v1/teacher")
+    @PostMapping("/teacher")
     public Teacher createTeacher(@Valid @RequestBody Teacher teacher) {
         return teacherService.createTeacher(teacher);
     }
 
-    @DeleteMapping("/api/v1/teacher/{id}")
+    @DeleteMapping("/teacher/{id}")
     public void deleteTeacher(@PathVariable String id) {
         teacherService.deleteTeacher(id);
     }
