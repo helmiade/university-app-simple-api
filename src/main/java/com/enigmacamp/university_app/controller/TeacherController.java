@@ -5,7 +5,9 @@ import com.enigmacamp.university_app.entity.Teacher;
 import com.enigmacamp.university_app.service.TeacherService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,6 +25,9 @@ public class TeacherController {
 
     @GetMapping("/teacher/{id}")
     public Teacher getTeacherById(@PathVariable String id) {
+        if (id == null || id.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Teacher ID cannot be empty");
+        }
         return teacherService.getTeacherById(id);
     }
 
@@ -38,6 +43,9 @@ public class TeacherController {
 
     @DeleteMapping("/teacher/{id}")
     public void deleteTeacher(@PathVariable String id) {
+        if (id == null || id.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Teacher ID cannot be empty");
+        }
         teacherService.deleteTeacher(id);
     }
 }

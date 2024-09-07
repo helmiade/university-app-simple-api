@@ -1,11 +1,13 @@
 package com.enigmacamp.university_app.service.impl;
 
-import com.enigmacamp.university_app.entity.Student;
 import com.enigmacamp.university_app.entity.Teacher;
 import com.enigmacamp.university_app.repository.TeacherRepository;
 import com.enigmacamp.university_app.service.TeacherService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 @Service
@@ -15,7 +17,11 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher createTeacher(Teacher teacher) {
-        return teacherRepository.save(teacher);
+        try {
+            return teacherRepository.save(teacher);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
     }
 
     @Override
@@ -36,11 +42,12 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void deleteTeacher(String id) {
-        teacherRepository.deleteById(id);
-
+        if(teacherRepository.existsById(id)) {
+            teacherRepository.deleteById(id);
+        } findByIdOrThrowNotFound(id);
     }
 
     private Teacher findByIdOrThrowNotFound(String id) {
-        return teacherRepository.findById(id).orElseThrow(() -> new RuntimeException("Teacher ID not found"));
+        return teacherRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Teacher with id " + id + " not found"));
     }
 }
