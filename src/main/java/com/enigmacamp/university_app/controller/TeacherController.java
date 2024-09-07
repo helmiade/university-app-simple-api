@@ -3,6 +3,7 @@ package com.enigmacamp.university_app.controller;
 import com.enigmacamp.university_app.entity.Student;
 import com.enigmacamp.university_app.entity.Teacher;
 import com.enigmacamp.university_app.service.TeacherService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +26,12 @@ public class TeacherController {
     }
 
     @PutMapping("/api/v1/teacher")
-    public Teacher updateTeacher(@RequestBody Teacher teacher) {
+    public Teacher updateTeacher(@Valid @RequestBody Teacher teacher) {
         return teacherService.updateTeacher(teacher);
     }
 
     @PostMapping("/api/v1/teacher")
-    public Teacher createTeacher(@RequestBody Teacher teacher) {
+    public Teacher createTeacher(@Valid @RequestBody Teacher teacher) {
         return teacherService.createTeacher(teacher);
     }
 
