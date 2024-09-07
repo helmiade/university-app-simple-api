@@ -39,6 +39,6 @@ public class Teacher {
     private String phoneNumber;
 
     @Column(unique = true)
-    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{1,}$", message = "Invalid email address")
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{1,}$", message = "Invalid email address format")
     private String email;
 }

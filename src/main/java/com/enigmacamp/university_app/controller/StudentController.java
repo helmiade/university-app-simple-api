@@ -2,6 +2,7 @@ package com.enigmacamp.university_app.controller;
 
 import com.enigmacamp.university_app.entity.Student;
 import com.enigmacamp.university_app.service.StudentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,12 +25,12 @@ public class StudentController {
     }
 
     @PutMapping("/api/v1/student")
-    public Student updateStudent(@RequestBody Student student) {
+    public Student updateStudent(@Valid @RequestBody Student student) {
         return studentService.updateStudent(student);
     }
 
     @PostMapping("/api/v1/student")
-    public Student createStudent(@RequestBody Student student) {
+    public Student createStudent(@Valid @RequestBody Student student) {
         return studentService.createStudent(student);
     }
 
