@@ -1,5 +1,4 @@
 package com.enigmacamp.university_app.entity;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

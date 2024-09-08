@@ -4,12 +4,13 @@ import com.enigmacamp.university_app.entity.Teacher;
 import com.enigmacamp.university_app.repository.TeacherRepository;
 import com.enigmacamp.university_app.service.TeacherService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
@@ -17,18 +18,8 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher createTeacher(Teacher teacher) {
-        try {
-            return teacherRepository.save(teacher);
-        } catch (DataIntegrityViolationException e) {
-            if(e.getMessage().contains("Key (email)")){
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
-            } else if (e.getMessage().contains("Key (phone_number)")) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Phone number already exists");
-            } else if (e.getMessage().contains("Key (nip)")) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "NIP already exists");
-            }
-            throw e;
-        }
+        validationTeacherUnique(teacher);
+        return teacherRepository.save(teacher);
     }
 
     @Override
@@ -44,18 +35,8 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Teacher updateTeacher(Teacher teacher) {
         findByIdOrThrowNotFound(teacher.getId());
-        try {
-            return teacherRepository.save(teacher);
-        } catch (DataIntegrityViolationException e) {
-            if(e.getMessage().contains("Key (email)")){
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
-            } else if (e.getMessage().contains("Key (phone_number)")) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Phone number already exists");
-            } else if (e.getMessage().contains("Key (nip)")) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "NIP already exists");
-            }
-            throw e;
-        }
+        validationTeacherUnique(teacher);
+        return teacherRepository.save(teacher);
     }
 
     @Override
@@ -68,5 +49,19 @@ public class TeacherServiceImpl implements TeacherService {
 
     private Teacher findByIdOrThrowNotFound(String id) {
         return teacherRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Teacher with id " + id + " not found"));
+    }
+
+    private void validationTeacherUnique(Teacher teacher) {
+        Optional<Teacher> existingTeacherEmail = teacherRepository.findByEmailIgnoreCase(teacher.getEmail());
+        Optional<Teacher> existingTeacherPhoneNumber = teacherRepository.findByPhoneNumber(teacher.getPhoneNumber());
+        Optional<Teacher> existingTeacherNip= teacherRepository.findByNip(teacher.getNip());
+
+        if(existingTeacherEmail.isPresent()&&!existingTeacherEmail.get().getId().equals(teacher.getId())){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
+        } else if(existingTeacherPhoneNumber.isPresent()&&!existingTeacherPhoneNumber.get().getId().equals(teacher.getId())){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Phone number already exists");
+        } else if (existingTeacherNip.isPresent()&&!existingTeacherNip.get().getId().equals(teacher.getId())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "NIP already exists");
+        }
     }
 }
