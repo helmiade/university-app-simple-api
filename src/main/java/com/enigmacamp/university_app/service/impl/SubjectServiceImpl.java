@@ -1,5 +1,4 @@
 package com.enigmacamp.university_app.service.impl;
-
 import com.enigmacamp.university_app.entity.Subject;
 import com.enigmacamp.university_app.repository.SubjectRepository;
 import com.enigmacamp.university_app.service.SubjectService;
@@ -17,6 +16,12 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public Subject createSubject(Subject subject) {
+        if (subject.getId() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"ID cannot be null");
+        }
+        if (subject.getSubjectName()==null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Subject Name cannot be null");
+        }
         validationSubjectUnique(subject);
         return subjectRepository.save(subject);
     }
@@ -33,6 +38,9 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public Subject updateSubject(Subject subject) {
+        if (subject.getId() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID cannot be null");
+        }
         findByIdOrThrowNotFound(subject.getId());
         validationSubjectUnique(subject);
         return subjectRepository.save(subject);

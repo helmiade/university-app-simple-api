@@ -1,5 +1,4 @@
 package com.enigmacamp.university_app.service.impl;
-
 import com.enigmacamp.university_app.entity.Teacher;
 import com.enigmacamp.university_app.repository.TeacherRepository;
 import com.enigmacamp.university_app.service.TeacherService;
@@ -7,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +16,12 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher createTeacher(Teacher teacher) {
+        if(teacher.getNip()== null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NIP cannot be null");
+        }
+        if(teacher.getFirstName()== null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name cannot be null");
+        }
         validationTeacherUnique(teacher);
         return teacherRepository.save(teacher);
     }
@@ -34,6 +38,15 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher updateTeacher(Teacher teacher) {
+        if (teacher.getId() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID cannot be null");
+        }
+        if(teacher.getNip()== null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NIP cannot be null");
+        }
+        if(teacher.getFirstName()== null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name cannot be null");
+        }
         findByIdOrThrowNotFound(teacher.getId());
         validationTeacherUnique(teacher);
         return teacherRepository.save(teacher);

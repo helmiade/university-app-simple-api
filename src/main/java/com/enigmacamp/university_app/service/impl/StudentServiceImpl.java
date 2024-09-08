@@ -15,12 +15,27 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     @Override
     public Student createStudent(Student student) {
+        if(student.getNim()== null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NIM cannot be null");
+        }
+        if(student.getFirstName()== null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name cannot be null");
+        }
         validationStudentUnique(student);
         return studentRepository.save(student);
     }
 
     @Override
     public Student updateStudent(Student student) {
+        if (student.getId() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID cannot be null");
+        }
+        if(student.getNim()== null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NIM cannot be null");
+        }
+        if(student.getFirstName()== null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name cannot be null");
+        }
         findByIdOrThrowNotFound(student.getId());
         validationStudentUnique(student);
         return studentRepository.save(student);
