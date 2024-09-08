@@ -16,12 +16,8 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public Subject createSubject(Subject subject) {
-        if (subject.getId() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"ID cannot be null");
-        }
-        if (subject.getSubjectName()==null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Subject Name cannot be null");
-        }
+        if (subject.getId() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"ID cannot be null");
+        if (subject.getSubjectName()==null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Subject Name cannot be null");
         validationSubjectUnique(subject);
         return subjectRepository.save(subject);
     }
@@ -38,9 +34,7 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public Subject updateSubject(Subject subject) {
-        if (subject.getId() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID cannot be null");
-        }
+        if (subject.getId() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID cannot be null");
         findByIdOrThrowNotFound(subject.getId());
         validationSubjectUnique(subject);
         return subjectRepository.save(subject);
@@ -61,8 +55,6 @@ public class SubjectServiceImpl implements SubjectService {
     private void validationSubjectUnique(Subject subject) {
         Optional<Subject> existingSubjectName = subjectRepository.findBySubjectNameIgnoreCase(subject.getSubjectName());
 
-        if(existingSubjectName.isPresent() &&!existingSubjectName.get().getId().equals(subject.getId())){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Subject name already exists");
-        }
+        if(existingSubjectName.isPresent() &&!existingSubjectName.get().getId().equals(subject.getId())) throw new ResponseStatusException(HttpStatus.CONFLICT, "Subject name already exists");
     }
 }

@@ -16,12 +16,8 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher createTeacher(Teacher teacher) {
-        if(teacher.getNip()== null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NIP cannot be null");
-        }
-        if(teacher.getFirstName()== null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name cannot be null");
-        }
+        if(teacher.getNip()== null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NIP cannot be null");
+        if(teacher.getFirstName()== null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name cannot be null");
         validationTeacherUnique(teacher);
         return teacherRepository.save(teacher);
     }
@@ -38,15 +34,9 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher updateTeacher(Teacher teacher) {
-        if (teacher.getId() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID cannot be null");
-        }
-        if(teacher.getNip()== null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NIP cannot be null");
-        }
-        if(teacher.getFirstName()== null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name cannot be null");
-        }
+        if (teacher.getId() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID cannot be null");
+        if(teacher.getNip()== null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NIP cannot be null");
+        if(teacher.getFirstName()== null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name cannot be null");
         findByIdOrThrowNotFound(teacher.getId());
         validationTeacherUnique(teacher);
         return teacherRepository.save(teacher);
@@ -69,12 +59,8 @@ public class TeacherServiceImpl implements TeacherService {
         Optional<Teacher> existingTeacherPhoneNumber = teacherRepository.findByPhoneNumber(teacher.getPhoneNumber());
         Optional<Teacher> existingTeacherNip= teacherRepository.findByNip(teacher.getNip());
 
-        if(existingTeacherEmail.isPresent()&&!existingTeacherEmail.get().getId().equals(teacher.getId())){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
-        } else if(existingTeacherPhoneNumber.isPresent()&&!existingTeacherPhoneNumber.get().getId().equals(teacher.getId())){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Phone number already exists");
-        } else if (existingTeacherNip.isPresent()&&!existingTeacherNip.get().getId().equals(teacher.getId())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "NIP already exists");
-        }
+        if(existingTeacherEmail.isPresent()&&!existingTeacherEmail.get().getId().equals(teacher.getId())) throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
+        if(existingTeacherPhoneNumber.isPresent()&&!existingTeacherPhoneNumber.get().getId().equals(teacher.getId())) throw new ResponseStatusException(HttpStatus.CONFLICT, "Phone number already exists");
+        if (existingTeacherNip.isPresent()&&!existingTeacherNip.get().getId().equals(teacher.getId())) throw new ResponseStatusException(HttpStatus.CONFLICT, "NIP already exists");
     }
 }

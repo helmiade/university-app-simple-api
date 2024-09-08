@@ -15,27 +15,17 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     @Override
     public Student createStudent(Student student) {
-        if(student.getNim()== null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NIM cannot be null");
-        }
-        if(student.getFirstName()== null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name cannot be null");
-        }
+        if(student.getNim()== null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NIM cannot be null");
+        if(student.getFirstName()== null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name cannot be null");
         validationStudentUnique(student);
         return studentRepository.save(student);
     }
 
     @Override
     public Student updateStudent(Student student) {
-        if (student.getId() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID cannot be null");
-        }
-        if(student.getNim()== null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NIM cannot be null");
-        }
-        if(student.getFirstName()== null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name cannot be null");
-        }
+        if (student.getId() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID cannot be null");
+        if(student.getNim()== null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NIM cannot be null");
+        if(student.getFirstName()== null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name cannot be null");
         findByIdOrThrowNotFound(student.getId());
         validationStudentUnique(student);
         return studentRepository.save(student);
@@ -68,14 +58,8 @@ public class StudentServiceImpl implements StudentService {
         Optional<Student> existingStudentPhoneNumber = studentRepository.findByPhoneNumber(student.getPhoneNumber());
         Optional<Student> existingStudentNim= studentRepository.findByNimIgnoreCase(student.getNim());
 
-        if(existingStudentEmail.isPresent()&&!existingStudentEmail.get().getId().equals(student.getId())){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
-        }
-        if(existingStudentPhoneNumber.isPresent()&&!existingStudentPhoneNumber.get().getId().equals(student.getId())){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Phone number already exists");
-        }
-        if (existingStudentNim.isPresent()&&!existingStudentNim.get().getId().equals(student.getId())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "NIM already exists");
-        }
+        if(existingStudentEmail.isPresent()&&!existingStudentEmail.get().getId().equals(student.getId())) throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
+        if(existingStudentPhoneNumber.isPresent()&&!existingStudentPhoneNumber.get().getId().equals(student.getId())) throw new ResponseStatusException(HttpStatus.CONFLICT, "Phone number already exists");
+        if (existingStudentNim.isPresent()&&!existingStudentNim.get().getId().equals(student.getId())) throw new ResponseStatusException(HttpStatus.CONFLICT, "NIM already exists");
     }
 }
