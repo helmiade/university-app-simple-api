@@ -16,6 +16,6 @@ public class Subject {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "subject_name", nullable = false, unique = true)
+    @Column(name = "subject_name", nullable = false)
     private String subjectName;
 }

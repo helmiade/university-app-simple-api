@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,9 +15,7 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public Subject createSubject(Subject subject) {
-        if (subject.getId() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"ID cannot be null");
         if (subject.getSubjectName()==null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Subject Name cannot be null");
-        validationSubjectUnique(subject);
         return subjectRepository.save(subject);
     }
 
@@ -36,7 +33,6 @@ public class SubjectServiceImpl implements SubjectService {
     public Subject updateSubject(Subject subject) {
         if (subject.getId() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID cannot be null");
         findByIdOrThrowNotFound(subject.getId());
-        validationSubjectUnique(subject);
         return subjectRepository.save(subject);
     }
 
@@ -50,11 +46,5 @@ public class SubjectServiceImpl implements SubjectService {
 
     private Subject findByIdOrThrowNotFound(String id) {
         return subjectRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Subject with id " + id + " not found"));
-    }
-
-    private void validationSubjectUnique(Subject subject) {
-        Optional<Subject> existingSubjectName = subjectRepository.findBySubjectNameIgnoreCase(subject.getSubjectName());
-
-        if(existingSubjectName.isPresent() &&!existingSubjectName.get().getId().equals(subject.getId())) throw new ResponseStatusException(HttpStatus.CONFLICT, "Subject name already exists");
     }
 }
