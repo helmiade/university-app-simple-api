@@ -5,7 +5,10 @@ import com.enigmacamp.university_app.entity.Teacher;
 import com.enigmacamp.university_app.repository.SubjectRepository;
 import com.enigmacamp.university_app.service.SubjectService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -16,7 +19,11 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public Subject createSubject(Subject subject) {
-        return subjectRepository.save(subject);
+        try {
+            return subjectRepository.save(subject);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Subject already exists");
+        }
     }
 
     @Override
@@ -32,15 +39,22 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Subject updateSubject(Subject subject) {
         findByIdOrThrowNotFound(subject.getId());
-        return subjectRepository.save(subject);
+        try {
+            return subjectRepository.save(subject);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Subject already exists");
+        }
     }
 
     @Override
     public void deleteSubject(String id) {
-        subjectRepository.deleteById(id);
+        if(subjectRepository.existsById(id)) {
+            subjectRepository.deleteById(id);
+            return;
+        } findByIdOrThrowNotFound(id);
     }
 
     private Subject findByIdOrThrowNotFound(String id) {
-        return subjectRepository.findById(id).orElseThrow(() -> new RuntimeException("Subject ID not found"));
+        return subjectRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Subject with id " + id + " not found"));
     }
 }
