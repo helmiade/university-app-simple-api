@@ -17,17 +17,13 @@ import java.util.List;
 public class TeacherController {
     private final TeacherService teacherService;
 
-    //    @GetMapping("/api/v1/students")
-    @RequestMapping("/teachers")
+    @GetMapping("/teachers")
     public List<Teacher> getAllTeacher() {
         return teacherService.getAllTeachers();
     }
 
     @GetMapping("/teacher/{id}")
     public Teacher getTeacherById(@PathVariable String id) {
-        if (id == null || id.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Teacher ID cannot be empty");
-        }
         return teacherService.getTeacherById(id);
     }
 
@@ -43,9 +39,6 @@ public class TeacherController {
 
     @DeleteMapping("/teacher/{id}")
     public void deleteTeacher(@PathVariable String id) {
-        if (id == null || id.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Teacher ID cannot be empty");
-        }
         teacherService.deleteTeacher(id);
     }
 }

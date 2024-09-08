@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Table(name = "m_teacher")
 @Data
@@ -41,4 +40,5 @@ public class Teacher {
     @Column(unique = true)
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{1,}$", message = "Invalid email address format")
     private String email;
+
 }

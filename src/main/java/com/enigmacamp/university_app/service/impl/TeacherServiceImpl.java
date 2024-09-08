@@ -20,7 +20,14 @@ public class TeacherServiceImpl implements TeacherService {
         try {
             return teacherRepository.save(teacher);
         } catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+            if(e.getMessage().contains("Key (email)")){
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
+            } else if (e.getMessage().contains("Key (phone_number)")) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Phone number already exists");
+            } else if (e.getMessage().contains("Key (nip)")) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "NIP already exists");
+            }
+            throw e;
         }
     }
 
@@ -37,13 +44,25 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Teacher updateTeacher(Teacher teacher) {
         findByIdOrThrowNotFound(teacher.getId());
-        return teacherRepository.save(teacher);
+        try {
+            return teacherRepository.save(teacher);
+        } catch (DataIntegrityViolationException e) {
+            if(e.getMessage().contains("Key (email)")){
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
+            } else if (e.getMessage().contains("Key (phone_number)")) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Phone number already exists");
+            } else if (e.getMessage().contains("Key (nip)")) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "NIP already exists");
+            }
+            throw e;
+        }
     }
 
     @Override
     public void deleteTeacher(String id) {
         if(teacherRepository.existsById(id)) {
             teacherRepository.deleteById(id);
+            return;
         } findByIdOrThrowNotFound(id);
     }
 
