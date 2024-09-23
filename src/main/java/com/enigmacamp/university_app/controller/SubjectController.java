@@ -1,7 +1,5 @@
 package com.enigmacamp.university_app.controller;
-
 import com.enigmacamp.university_app.entity.Subject;
-import com.enigmacamp.university_app.entity.Teacher;
 import com.enigmacamp.university_app.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
